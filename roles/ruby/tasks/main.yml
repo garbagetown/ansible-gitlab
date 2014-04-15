@@ -22,3 +22,6 @@
 - name: install ruby
   command: chdir=/tmp/ruby-2.1.1 make prefix=/usr/local install
   when: ruby_installed|failed
+
+- name: install bundler
+  gem: name=bundler state=present user_install=no

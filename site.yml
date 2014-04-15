@@ -1,0 +1,5 @@
+- name: install gitlab
+  hosts: gitlab
+  user: root
+  roles:
+    - packages

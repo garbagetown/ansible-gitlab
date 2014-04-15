@@ -1,0 +1,54 @@
+---
+- name: add EPEL repository
+  template: src=epel.repo dest=/etc/yum.repos.d/epel.repo mode=0644
+
+- name: add PUIAS repository
+  template: src=puias.repo dest=/etc/yum.repos.d/PUIAS_6_computational.repo mode=0644
+
+- name: update yum
+  yum: name=* state=latest
+
+- name: install development group
+  yum: pkg='@development' state=latest
+
+- name: install packages
+  yum: pkg={{ item }} state=present enablerepo=epel
+  with_items:
+    - vim-enhanced
+    - readline
+    - readline-devel
+    - ncurses-devel
+    - gdbm-devel
+    - glibc-devel
+    - tcl-devel
+    - openssl-devel
+    - curl-devel
+    - expat-devel
+    - db4-devel
+    - byacc
+    - sqlite-devel
+    - gcc-c++
+    - libyaml
+    - libyaml-devel
+    - libffi
+    - libffi-devel
+    - libxml2
+    - libxml2-devel
+    - libxslt
+    - libxslt-devel
+    - libicu
+    - libicu-devel
+    - system-config-firewall-tui
+    - redis
+    - sudo
+    - wget
+    - crontabs
+    - logwatch
+    - logrotate
+    - perl-Time-HiRes
+    - git
+    - patch
+    - postfix
+
+- name: chkconfig redis on
+  service: name=redis state=started enabled=yes

@@ -1,0 +1,7 @@
+[PUIAS_6_computational]
+name=PUIAS computational Base $releasever - $basearch
+mirrorlist=http://puias.math.ias.edu/data/puias/computational/$releasever/$basearch/mirrorlist
+#baseurl=http://puias.math.ias.edu/data/puias/computational/$releasever/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=http://springdale.math.ias.edu/data/puias/6/x86_64/os/RPM-GPG-KEY-puias

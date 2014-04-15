@@ -1,14 +1,24 @@
+- name: check ruby installed
+  command: test -x /usr/local/bin/ruby
+  register: ruby_installed
+  ignore_errors: yes
+
 - name: download ruby
   get_url: url=ftp://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.1.tar.gz dest=/tmp
+  when: ruby_installed|failed
 
 - name: extract ruby
   command: chdir=/tmp creates=ruby-2.1.1 tar -xzf ruby-2.1.1.tar.gz
+  when: ruby_installed|failed
 
 - name: configure ruby
   command: chdir=/tmp/ruby-2.1.1 ./configure --disable-install-rdoc
+  when: ruby_installed|failed
 
 - name: make ruby
   command: chdir=/tmp/ruby-2.1.1 make
+  when: ruby_installed|failed
 
 - name: install ruby
   command: chdir=/tmp/ruby-2.1.1 make prefix=/usr/local install
+  when: ruby_installed|failed

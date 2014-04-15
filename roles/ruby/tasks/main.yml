@@ -1,0 +1,14 @@
+- name: download ruby
+  get_url: url=ftp://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.1.tar.gz dest=/tmp
+
+- name: extract ruby
+  command: chdir=/tmp creates=ruby-2.1.1 tar -xzf ruby-2.1.1.tar.gz
+
+- name: configure ruby
+  command: chdir=/tmp/ruby-2.1.1 ./configure --disable-install-rdoc
+
+- name: make ruby
+  command: chdir=/tmp/ruby-2.1.1 make
+
+- name: install ruby
+  command: chdir=/tmp/ruby-2.1.1 make prefix=/usr/local install

@@ -1,0 +1,2 @@
+- name: add system user 'git'
+  user: name=git system=yes

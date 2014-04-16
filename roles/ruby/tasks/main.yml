@@ -23,5 +23,9 @@
   command: chdir=/tmp/ruby-2.1.1 make prefix=/usr/local install
   when: ruby_installed|failed
 
+- name: add ruby to securepath
+  lineinfile: dest=/etc/sudoers regexp='/usr/local/bin' insertafter='^Defaults +secure_path'
+              line='Defaults    secure_path += /usr/local/bin'
+
 - name: install bundler
   gem: name=bundler state=present user_install=no

@@ -1,2 +1,13 @@
 - name: add system user 'git'
   user: name=git system=yes
+
+- name: make sure /home/git/.ssh directory is exist
+  file: path=/home/git/.ssh state=directory
+        owner=git group=git mode=700
+
+- name: copy authorized_keys
+  shell: cp /root/.ssh/authorized_keys /home/git/.ssh/authorized_keys
+
+- name: chmod authorized_keys
+  file: path=/home/git/.ssh/authorized_keys state=file
+       owner=git group=git mode=600

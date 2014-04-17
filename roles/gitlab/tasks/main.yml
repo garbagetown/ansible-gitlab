@@ -1,0 +1,46 @@
+- name: clone gitlab repository
+  git: repo=https://gitlab.com/gitlab-org/gitlab-ce.git version=6-7-stable
+       dest=~/gitlab
+  remote_user: git
+
+- name: copy the example gitlab config
+  shell: cp config/gitlab.yml.example config/gitlab.yml chdir=~/gitlab
+  remote_user: git
+
+- name: make sure git can write to the directories
+  file: path={{ item }} state=directory owner=git group=git mode=0775
+  with_items:
+    - ~/gitlab/log
+    - ~/gitlab/tmp
+    - ~/gitlab-satellites
+    - ~/gitlab/tmp/pids
+    - ~/gitlab/tmp/sockets
+    - ~/gitlab/public/uploads
+  remote_user: git
+
+- name: copy the example unicorn config
+  shell: cp config/unicorn.rb.example config/unicorn.rb chdir=~/gitlab
+  remote_user: git
+
+- name: copy the example rack attack config
+  shell: cp config/initializers/rack_attack.rb.example config/initializers/rack_attack.rb chdir=~/gitlab
+  remote_user: git
+
+- name: configure gitlab db settings
+  template: src=database.yml.mysql.j2 dest=~/gitlab/config/database.yml mode=0600
+  remote_user: git
+
+- name: install gems
+  shell: bundle install --deployment --without development test postgres aws chdir=~/gitlab
+  remote_user: git
+
+- name: initialize database
+  shell: export force=yes && bundle exec rake gitlab:setup RAILS_ENV=production chdir=~/gitlab
+  remote_user: git
+
+- name: install init script
+  get_url: url=https://gitlab.com/gitlab-org/gitlab-recipes/raw/master/init/sysvinit/centos/gitlab-unicorn
+           dest=/etc/init.d/gitlab owner=root group=root mode=755
+
+- name: make gitlab start on boot
+  service: name=gitlab state=started enabled=yes

@@ -24,8 +24,8 @@
   when: ruby_installed|failed
 
 - name: add ruby to securepath
-  lineinfile: dest=/etc/sudoers regexp='/usr/local/bin' insertafter='^Defaults +secure_path'
-              line='Defaults    secure_path += /usr/local/bin'
+  lineinfile: dest=/etc/sudoers regexp='^Defaults +secure_path'
+              line='Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin'
 
 - name: install bundler
   gem: name=bundler state=present user_install=no

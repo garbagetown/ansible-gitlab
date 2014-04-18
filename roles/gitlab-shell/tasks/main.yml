@@ -7,6 +7,13 @@
   shell: cp config.yml.example config.yml chdir=~/gitlab-shell
   remote_user: git
 
+- name: config gitlab_url
+  lineinfile:
+    dest: /home/git/gitlab-shell/config.yml
+    regexp: '^gitlab_url'
+    line: 'gitlab_url: "{{ gitlab_url }}"'
+  remote_user: git
+
 - name: do setup
   shell: bin/install chdir=~/gitlab-shell
   remote_user: git

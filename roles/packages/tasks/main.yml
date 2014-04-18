@@ -2,9 +2,6 @@
 - name: add EPEL repository
   template: src=epel.repo dest=/etc/yum.repos.d/epel.repo mode=0644
 
-- name: add PUIAS repository
-  template: src=puias.repo dest=/etc/yum.repos.d/PUIAS_6_computational.repo mode=0644
-
 - name: update yum
   yum: name=* state=latest
 

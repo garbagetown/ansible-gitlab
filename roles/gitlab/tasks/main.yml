@@ -7,6 +7,10 @@
   shell: cp config/gitlab.yml.example config/gitlab.yml chdir=~/gitlab
   remote_user: git
 
+- name: configure hostname
+  shell: sed -i "s/localhost/${HOSTNAME}/g" config/gitlab.yml chdir=~/gitlab
+  remote_user: git
+
 - name: make sure git can write to the directories
   file: path={{ item }} state=directory owner=git group=git mode=0775
   with_items:

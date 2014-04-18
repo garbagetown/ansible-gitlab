@@ -1,0 +1,27 @@
+- name: add nginx repository
+  template: src=nginx.repo dest=/etc/yum.repos.d/nginx.repo mode=0644
+
+- name: update yum
+  yum: name=* state=latest
+
+- name: install nginx
+  yum: pkg={{ item }} state=present enablerepo=nginx
+  with_items:
+    - nginx
+
+- name: download nginx.conf
+  get_url: url=https://gitlab.com/gitlab-org/gitlab-recipes/raw/master/web-server/nginx/gitlab-ssl
+           dest=/etc/nginx/conf.d/gitlab.conf
+
+- name: create self-signed SSL cert
+  command: openssl req -new -nodes -x509 -subj "/C={{ C }}/ST={{ ST }}/CN={{ CN }}" -days 3650 -keyout /etc/nginx/gitlab.key -out /etc/nginx/gitlab.crt
+           creates=/etc/nginx/gitlab.crt
+
+- name: add nginx user to git group
+  user: name=nginx groups=nginx,git
+
+- name: add read and exec access of git home to git group
+  file: path=/home/git mode=750
+
+- name: chkconfig nginx on
+  service: name=nginx state=started enabled=yes

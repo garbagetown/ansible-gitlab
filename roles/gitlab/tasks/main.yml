@@ -42,5 +42,12 @@
   get_url: url=https://gitlab.com/gitlab-org/gitlab-recipes/raw/master/init/sysvinit/centos/gitlab-unicorn
            dest=/etc/init.d/gitlab owner=root group=root mode=755
 
+- name: setup logrotate
+  shell: cp lib/support/logrotate/gitlab /etc/logrotate.d/gitlab chdir=/home/git/gitlab
+
 - name: make gitlab start on boot
   service: name=gitlab state=started enabled=yes
+
+- name: compile assets
+  shell: bundle exec rake assets:precompile RAILS_ENV=production chdir=~/gitlab
+  remote_user: git

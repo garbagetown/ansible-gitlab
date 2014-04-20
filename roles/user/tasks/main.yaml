@@ -13,8 +13,8 @@
         owner=git group=git mode=600
 
 - name: copy .gitconfig
-  template: src=.gitconfig.j2 dest=/home/git/.gitconfig
-            owner=git group=git mode=664
+  copy: src=.gitconfig dest=/home/git/.gitconfig
+        owner=git group=git mode=664
 
 - name: copy .gemrc
   copy: src=.gemrc dest=/home/git/.gemrc

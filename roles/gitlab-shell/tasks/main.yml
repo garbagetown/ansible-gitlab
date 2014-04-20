@@ -7,11 +7,25 @@
   shell: cp config.yml.example config.yml chdir=~/gitlab-shell
   remote_user: git
 
-- name: config gitlab_url
+- name: configure gitlab_url
   lineinfile:
     dest: /home/git/gitlab-shell/config.yml
     regexp: '^gitlab_url'
     line: 'gitlab_url: "{{ gitlab_url }}"'
+  remote_user: git
+
+- name: configure ca_file path
+  lineinfile:
+    dest: /home/git/gitlab-shell/config.yml
+    regexp: '^#? +ca_file'
+    line: '  ca_file: /etc/nginx/gitlab.crt'
+  remote_user: git
+
+- name: enable self_signed_cert
+  lineinfile:
+    dest: /home/git/gitlab-shell/config.yml
+    regexp: '^ +self_signed_cert'
+    line: '  self_signed_cert: true'
   remote_user: git
 
 - name: do setup

@@ -11,6 +11,14 @@
   shell: sed -i "s/localhost/${HOSTNAME}/g" config/gitlab.yml chdir=~/gitlab
   remote_user: git
 
+- name: set the production port to 443
+  shell: "sed -i 's/port: 80/port: 443/' config/gitlab.yml chdir=~/gitlab"
+  remote_user: git
+
+- name: enable https
+  shell: "sed -i 's/https: false/https: true/' config/gitlab.yml chdir=~/gitlab"
+  remote_user: git
+
 - name: make sure git can write to the directories
   file: path={{ item }} state=directory owner=git group=git mode=0775
   with_items:

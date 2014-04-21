@@ -8,7 +8,7 @@
   remote_user: git
 
 - name: configure hostname
-  shell: sed -i "s/localhost/${HOSTNAME}/g" config/gitlab.yml chdir=~/gitlab
+  shell: sed -i "s/localhost/{{ fqdn }}/g" config/gitlab.yml chdir=~/gitlab
   remote_user: git
 
 - name: set the production port to 443

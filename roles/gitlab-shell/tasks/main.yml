@@ -11,7 +11,7 @@
   lineinfile:
     dest: /home/git/gitlab-shell/config.yml
     regexp: '^gitlab_url'
-    line: 'gitlab_url: "{{ gitlab_url }}"'
+    line: 'gitlab_url: "https://{{ fqdn }}/"'
   remote_user: git
 
 - name: configure ca_file path

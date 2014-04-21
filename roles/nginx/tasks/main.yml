@@ -13,8 +13,11 @@
   get_url: url=https://gitlab.com/gitlab-org/gitlab-recipes/raw/04a6ff6cf8355cd7871e92e4d5ca65db680a3918/web-server/nginx/gitlab-ssl
            dest=/etc/nginx/conf.d/gitlab.conf
 
+- name: replace server_name
+  command: sed -i "s/^ \+server_name .\+;$/    server_name {{ fqdn }};/g" /etc/nginx/conf.d/gitlab.conf
+
 - name: create self-signed SSL cert
-  command: openssl req -new -nodes -x509 -subj "/C={{ C }}/ST={{ ST }}/CN={{ CN }}"
+  command: openssl req -new -nodes -x509 -subj "/C={{ C }}/ST={{ ST }}/CN={{ fqdn }}"
            -days 3650 -keyout /etc/nginx/gitlab.key -out /etc/nginx/gitlab.crt
            creates=/etc/nginx/gitlab.crt
 
